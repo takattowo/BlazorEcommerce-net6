@@ -1,39 +1,47 @@
-﻿@inject HttpClient Http
+﻿@inject IProductService ProductService
 
-<div class="container mt-5 mb-5">
-    <div class="d-flex justify-content-center row">
-        <div class="col-md-10">
-    @foreach (var book in Products)
+@if(ProductService.Products == null || ProductService.Products.Count == 0)
+{
+    <p>Fetching...</p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+    @foreach (var book in ProductService.Products)
     {
-         <div class="row p-2 bg-white border rounded">
-                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" src="@book.ImageUrl"></div>
-                <div class="col-md-6 mt-1">
-                    <h5>@book.Title</h5>
-                       
-                    <p class="text-justify text-truncate para mb-0">@book.Description<br><br></p>
+        <div class="col-md-3">
+        <div class="ibox">
+            <div class="ibox-content product-box">
+                <div class="product-imitation">
+                    <img src="@book.ImageUrl" alt="@book.Title" title="@book.Title">
                 </div>
-                <div class="align-items-center align-content-center col-md-3 border-left mt-1">
-                    <div class="d-flex flex-row align-items-center">
-                        <h4 class="mr-1">$13.99</h4><span class="strike-text">$@book.Price</span>
+                <div class="product-desc">
+                    <span class="product-price">
+                        @book.Price
+                    </span>
+                    <small class="text-muted">Category</small>
+                    <a href="/product/@book.Id" class="product-name"> @book.Title</a>
+
+                    <div class="small m-t-xs">
+                        @book.Description
                     </div>
-                    <h6 class="text-success">Free shipping</h6>
-                    <div class="d-flex flex-column mt-4"><button class="btn btn-primary btn-sm" type="button">Details</button><button class="btn btn-outline-primary btn-sm mt-2" type="button">Add to wishlist</button></div>
                 </div>
             </div>
+        </div>
+    </div>
 
     }
-</div></div></div>
+        </div>
+    </div>
+}
 
 @code {
     private static List<Product> Products = new List<Product>();
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Http.GetFromJsonAsync<List<Product>>("api/Product");
-        if (result != null)
-            Products = result;
-
-
+        await ProductService.GetProducts();      
     }
 
 }
