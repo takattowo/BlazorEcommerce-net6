@@ -1,8 +1,9 @@
 ﻿@inject IProductService ProductService
+@implements IDisposable
 
 @if(ProductService.Products == null || ProductService.Products.Count == 0)
 {
-    <p>Fetching...</p>
+    <p>@ProductService.Message</p>
 }
 else
 {
@@ -18,9 +19,9 @@ else
                 </div>
                 <div class="product-desc">
                     <span class="product-price">
-                        @book.Price
+                        @GetPriceText(book)
                     </span>
-                    <small class="text-muted">Category</small>
+                    <small class="text-muted">@book.CategoryId</small>
                     <a href="/product/@book.Id" class="product-name"> @book.Title</a>
 
                     <div class="small m-t-xs">
@@ -34,14 +35,38 @@ else
     }
         </div>
     </div>
+
+    for (var i = 1; i < ProductService.PageCount; i++)
+    {
+        <a class="btn @(i == ProductService.PageCount ? "btn-info" : "btn-outline-info") page-selection"
+        href="/search/@ProductService.LastSearchText/@i">@i</a>
+    }
 }
 
 @code {
-    private static List<Product> Products = new List<Product>();
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await ProductService.GetProducts();      
+        ProductService.ProductsChanged += StateHasChanged;
     }
 
+    public void Dispose()
+    {
+        ProductService.ProductsChanged -= StateHasChanged;
+    }
+
+    private string GetPriceText(Product product)
+    {
+        var variants = product.Variants;
+        if(variants.Count == 0)
+        {
+            return string.Empty;
+        }
+        else if (variants.Count == 1)
+        {
+            return $"${variants[0].Price}";
+        }
+
+        decimal minPrice = variants.Min(v=>v.Price);
+        return $"Starting at ${minPrice}";
+    }
 }
