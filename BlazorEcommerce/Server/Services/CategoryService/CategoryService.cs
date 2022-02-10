@@ -8,7 +8,6 @@
 		{
 			_context = context;
 		}
-
 		public async Task<ServiceResponse<List<Category>>> GeCategoriesAsync()
 		{
 			var cat = await _context.Categories.ToListAsync();

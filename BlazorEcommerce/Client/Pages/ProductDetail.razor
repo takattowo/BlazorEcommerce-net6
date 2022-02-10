@@ -1,5 +1,6 @@
 ﻿@page "/product/{id:int}"
 @inject IProductService ProductService
+@inject ICartService CartService
 
 <head>
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -80,7 +81,7 @@ else
 							<span class="color blue"></span>
 						</h5>
 						<div class="action">
-							<button class="add-to-cart btn btn-default" type="button">add to cart</button>
+							<button class="add-to-cart btn btn-default" @onclick="AddToCart" type="button">add to cart</button>
 							<button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
 						</div>
 					</div>
@@ -116,15 +117,27 @@ else
 		}
 	}
 
-	
+
 	private ProductVariant GetSelectedVariant()
 	{
 		var variant = product.Variants.FirstOrDefault(v => v.ProductTypeId == currentTypeId);
 		return variant;
 	}
-	
+
 	private void SelectVariant(int id)
 	{
 		currentTypeId = id;
+	}
+
+	private async Task AddToCart()
+	{
+		var variant = GetSelectedVariant();
+		var cartItem = new CartItem
+			{
+				ProductId = variant.ProductId,
+				ProductTypeId = variant.ProductTypeId
+			};
+
+		await CartService.AddToCart(cartItem);
 	}
 }
