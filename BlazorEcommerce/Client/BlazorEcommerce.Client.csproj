@@ -9,12 +9,15 @@
   <ItemGroup>
     <None Remove="Pages\Cart.razor.css" />
     <None Remove="Pages\Counter.razor.css" />
+    <None Remove="Pages\ProductDetail - Copy.razor.css" />
     <None Remove="Pages\ProductDetail.razor.css" />
+    <None Remove="Pages\Register.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Pages\Cart.razor.css" />
     <Content Include="Pages\ProductDetail.razor.css" />
+    <Content Include="Pages\Register.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
