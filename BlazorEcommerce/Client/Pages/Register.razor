@@ -1,6 +1,7 @@
 ﻿@page "/register"
+@inject IAuthService AuthService
 
-<EditForm Model="user" OnValidSubmit="RegisterHandkleret">
+<EditForm Model="user" OnValidSubmit="HandleRegistration">
     <DataAnnotationsValidator/>
 	<div class="vh-100" style="background-color: #eee;"> 
   <div class="container h-100">
@@ -13,7 +14,7 @@
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                <form class="mx-1 mx-md-4">
+                <div class="mx-1 mx-md-4">
 
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -52,10 +53,11 @@
                   </div>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    <button type="submit" class="btn btn-primary">Register</button>
                   </div>
 
-                </form>
+                </div>
+                <div class="text-danger">@msg</div>
                 <ValidationSummary/>
               </div>
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
@@ -73,10 +75,21 @@
 </EditForm>
 
 @code {
-	UserRegister user = new UserRegister();
+    UserRegister user = new UserRegister();
 
-	private void RegisterHandkleret()
-	{
-		 
+    private string msg = string.Empty;
+
+    private async Task HandleRegistration()
+    {
+        var rs = await AuthService.Register(user);
+        if(!rs.Success)
+        {
+            msg = rs.Message;
+        }
+        else
+        {
+             msg = string.Empty;
+        }
+
 	}
 }
