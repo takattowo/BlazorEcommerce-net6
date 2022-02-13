@@ -1,0 +1,32 @@
+﻿@inject IAuthService AuthService
+
+<EditForm Model="user" OnValidSubmit="HandleRegistration">
+    <DataAnnotationsValidator/>
+	<h2 class="text-center">Log in</h2>       
+        <div class="form-group">
+            <InputText @bind-Value="user.Email" type="email" class="form-control" placeholder="Email" required="required"/>
+        </div>
+        <div class="form-group">
+             <InputText @bind-Value="user.Password" type="password" class="form-control" placeholder="Password" required="required"/>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </div>
+        <div class="clearfix">
+            <label class="float-left form-check-label"><input type="checkbox"> Remember me</label>
+            <a href="#" class="float-right">Forgot Password?</a>
+        </div>        
+        <p class="text-center"><a href="/register">Create an Account</a></p>
+</EditForm>
+
+@code {
+    UserLogin user = new UserLogin();
+
+    private string msg = string.Empty;
+
+    private async Task HandleRegistration()
+    {
+        
+
+	}
+}

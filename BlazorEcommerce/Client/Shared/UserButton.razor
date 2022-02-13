@@ -1,6 +1,8 @@
-﻿@inject ILocalStorageService LocalStorage
+﻿@using BlazorEcommerce.Client.Shared
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 @inject ICartService CartService
+@inject IModalService modal  
 
 <div class="dropdown">
     <button @onclick="ToggleUserMenu"
@@ -18,7 +20,7 @@
                 <button class="dropdown-item" @onclick="Logout">Logout</button>
             </Authorized>
             <NotAuthorized>
-                <a href="login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item">Login</a>
+                <a @onclick="@(()=>modal.Show<Login>("Login"))" class="dropdown-item">Login</a>
                 <a href="register" class="dropdown-item">Register</a>
             </NotAuthorized>
         </AuthorizeView>
@@ -26,6 +28,7 @@
 </div>
 
 @code {
+    @*href="login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" href with return once login*@
     private bool showUserMenu = false;
 
     private string UserMenuCssClass => showUserMenu ? "show-menu" : null;

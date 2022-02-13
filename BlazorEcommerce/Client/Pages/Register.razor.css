@@ -1,9 +1,1 @@
-﻿@page "/register"
-
-<EditForm Model="user" OnValidSubmiit="Register">
-
-</EditForm>
-
-@code {
-	UserRegister user = new UserRegister();
-}
+﻿
